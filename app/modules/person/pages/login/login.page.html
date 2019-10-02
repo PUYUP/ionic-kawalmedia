@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title class="ion-padding-start-14 ion-padding-end-14">Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p>
+    <ion-text color="dark">
+      Login ke akun Anda
+    </ion-text>
+  </p>
+
+  <form [formGroup]="createFormGroup">
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating">Nama Pengguna</ion-label>
+      <ion-input
+        type="text"
+        inputmode="text"
+        formControlName="username"
+        clearInput="true"
+        required></ion-input>
+    </ion-item>
+
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating">Kata Sandi</ion-label>
+      <ion-input
+        type="password"
+        inputmode="password"
+        formControlName="password"
+        clearInput="true"
+        required></ion-input>
+    </ion-item>
+
+    <ion-button 
+      [disabled]="createFormGroup.invalid || isLoading"
+      (tap)="formSubmit()"
+      expand="block"
+      mode="ios"
+      color="tertiary"
+      class="ion-margin-top">
+      <ion-spinner *ngIf="isLoading" color="light" name="dots" class="ion-margin-end"></ion-spinner>
+      {{ isLoading ? 'Memproses...' : 'Login' }}
+    </ion-button>
+
+    <ion-button
+      color="light"
+      expand="block"
+      mode="ios"
+      class="ion-margin-top"
+      [disabled]="isLoadingResend"
+      (tap)="passwordRecovery()">
+      Lupa Kata Sandi?
+    </ion-button>
+  </form>
+</ion-content>

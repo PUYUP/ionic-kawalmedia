@@ -1,0 +1,61 @@
+<div *ngIf="mediaData" fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="100%">
+        <app-pickup action="upload_logo" [mediaData]="mediaData"></app-pickup>
+    
+        <ionic4-star-rating
+          class="ion-text-center"
+          activeIcon="md-star"
+          defaultIcon="md-star"
+          halfIcon="md-star-half"
+          activeColor="#FDCC0D" 
+          defaultColor="#e5e5e5"
+          readonly="true"
+          halfStar="true"
+          rating="{{ mediaData.ratings.score_avg ? mediaData.ratings.score_avg : 0 }}"
+          fontSize="30px">
+        </ionic4-star-rating>
+
+        <p class="ion-text-center ion-no-margin">
+          <ion-text>
+            <small>
+              <strong>{{ mediaData.ratings.score_avg ? mediaData.ratings.score_avg : 0 }}</strong> 
+              dari {{ mediaData.rating_count }} suara
+            </small>
+          </ion-text>
+        </p>
+    </div>
+
+    <section *ngIf="mediaData.attribute_values">
+      <p *ngIf="mediaData.attribute_values.description" class="ion-text-center">
+        {{ mediaData.attribute_values.description }}
+      </p>
+
+      <ion-list>
+        <ion-item-divider>
+          <ion-label>Semua Rating</ion-label>
+
+          <ion-button slot="end" mode="ios">
+            <ion-icon name="add" slot="start"></ion-icon>
+            Beri Rating
+          </ion-button>
+        </ion-item-divider>
+
+        <ion-item *ngFor="let rating of ratingsLoop; let i = index; let lst = last;" lines="{{ lst ? 'none': '' }}">
+          <ionic4-star-rating
+            activeIcon="md-star"
+            defaultIcon="md-star"
+            activeColor="#FDCC0D" 
+            defaultColor="#e5e5e5"
+            readonly="true"
+            rating="{{ rating }}"
+            fontSize="25px">
+          </ionic4-star-rating>
+
+          <ion-note slot="end">
+            <strong>{{ mediaData.ratings[i+1] }}</strong>
+            suara
+          </ion-note>
+        </ion-item>
+      </ion-list>
+    </section>
+</div>

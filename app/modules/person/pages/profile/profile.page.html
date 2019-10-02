@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Profil Saya</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="option" checked>
+      <ion-label>Biodata</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="security">
+      <ion-label>Keamanan</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <section class="ion-padding">
+    <app-option *ngIf="segment === 'option'" [personData]="personData"></app-option>
+    <app-security *ngIf="segment === 'security'" [personData]="personData"></app-security>
+  </section>
+</ion-content>

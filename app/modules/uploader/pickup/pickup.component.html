@@ -1,0 +1,69 @@
+<section *ngIf="action === 'upload_' + identifier">
+    <div fxLayout="column" fxLayoutAlign="center">
+        <div class="ion-margin-bottom ion-margin-top" fxLayoutAlign="center">
+            <img *ngIf="filePreview && !croppedImage" [src]="filePreview">
+            <img *ngIf="filePreview && croppedImage" [src]="croppedImage">
+        </div>
+
+        <div *ngIf="ownership" class="ion-margin-bottom" fxLayoutAlign="center">
+            <input type="file" hidden="true" name="{{ identifier }}" ng2FileSelect [uploader]="uploader" accept="image/*" (change)="fileChangeEvent($event)" capture #fileSelect />
+            <ion-button color="light" 
+                class="ion-margin-end"
+                size="small"
+                *ngIf="filePreview" mat-button type="button" [disabled]="isLoading" (tap)="fileSelect.click()">
+                <ion-icon slot="start" name="aperture"></ion-icon>
+                <span class="ml-1">Ganti</span>
+            </ion-button>
+
+            <ion-button color="light"
+                class="ion-margin-end"
+                size="small"
+                *ngIf="filePreview && !hasChanged" mat-button type="button" [disabled]="isLoading" (tap)="deleteFile(identifier)">
+                <ion-icon slot="start" name="trash"></ion-icon>
+                <span class="ml-1">Hapus</span>
+            </ion-button>
+
+            <ion-button 
+                class="ion-margin-end"
+                size="small"
+                color="light" *ngIf="!filePreview" mat-button type="button" [disabled]="isLoading" (tap)="fileSelect.click()">
+                <ion-icon slot="start" name="aperture"></ion-icon>
+                <span class="ml-1">Pilih Foto</span>
+            </ion-button>
+
+            <ion-button
+                class="ion-margin-end"
+                size="small"
+                color="light" *ngIf="hasChanged" mat-button [disabled]="isLoading" type="button" (tap)="submitUpload()">
+                <ion-icon slot="start" name="checkmark"></ion-icon>
+                <span class="ml-1">Simpan</span>
+            </ion-button>
+
+            <ion-button color="light"
+                size="small"
+                *ngIf="hasChanged" mat-button [disabled]="isLoading" type="button" (tap)="cancelUpload()">
+                <ion-icon slot="start" name="close"></ion-icon>
+                <span class="ml-1">Batal</span>
+            </ion-button>
+        </div>
+
+        <image-cropper
+            fxLayoutAlign="center"
+            [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="4 / 4"
+            [resizeToWidth]="128"
+            [cropperMinWidth]="128"
+            [onlyScaleDown]="true"
+            [roundCropper]="false"
+            format="png"
+            outputType="file"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded()"
+            (cropperReady)="cropperReady()"
+            (loadImageFailed)="loadImageFailed()"
+            [style.display]="showCropper ? null : 'none'"
+            [alignImage]="'center'"
+        ></image-cropper>
+    </div>
+</section>

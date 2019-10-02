@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Validasi Akun</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p>
+    <ion-text color="dark">
+      Periksa kotak masuk email Anda, kami telah mengirim kode rahasia.
+    </ion-text>
+  </p>
+
+  <form [formGroup]="createFormGroup">
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating">Kode Otentikasi</ion-label>
+      <ion-input
+        type="text"
+        inputmode="text"
+        formControlName="secure_code"
+        clearInput="true"
+        minlength="6"
+        maxlength="6"
+        required></ion-input>
+    </ion-item>
+
+    <ion-button 
+      [disabled]="createFormGroup.invalid || isLoading"
+      (tap)="formSubmit()"
+      expand="block"
+      mode="ios"
+      color="tertiary"
+      class="ion-margin-top">
+      <ion-spinner *ngIf="isLoading" color="light" name="dots" class="ion-margin-end"></ion-spinner>
+      {{ isLoading ? 'Memproses...' : 'Validasi' }}
+    </ion-button>
+
+    <ion-button
+      color="light"
+      expand="block"
+      mode="ios"
+      class="ion-margin-top"
+      [disabled]="isLoadingResend"
+      (tap)="sendValidation()">
+      Kirim Ulang Kode
+    </ion-button>
+  </form>
+</ion-content>

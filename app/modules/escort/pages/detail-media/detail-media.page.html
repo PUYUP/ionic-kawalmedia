@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="media"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ isLoading ? 'Memuat...' : (mediaData ? mediaData.label : 'Akses ditolak') }}</ion-title>
+
+    <ion-text *ngIf="!isLoading && mediaData" slot="end" class="ion-margin-end ion-text-uppercase">
+      <small>{{ mediaData.status }}</small>
+    </ion-text>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <app-component-detail-media [mediaData]="mediaData"></app-component-detail-media>
+</ion-content>

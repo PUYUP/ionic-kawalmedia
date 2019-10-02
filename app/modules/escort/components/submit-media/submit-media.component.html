@@ -1,0 +1,96 @@
+<ion-spinner *ngIf="isLoadingInit"></ion-spinner>
+
+<section *ngIf="options">
+    <form [formGroup]="createFormGroup">
+        <ion-list>
+            <ion-item *ngFor="let option of options" class="ion-no-padding">
+                <ion-label *ngIf="option.type !== 'multi_option'"
+                  position="floating"
+                  class="ion-text-wrap" 
+                  [ngStyle]="{'margin-bottom': '7.5px'}">
+                  {{ option.label }}
+
+                  <ion-text *ngIf="option.identifier === 'label' && mediaListed" color="danger">
+                      Sudah terdaftar: {{ listedsList }}
+                      <i>(media harus belum terdaftar)</i>
+                  </ion-text>
+                </ion-label>
+                
+                <ion-input *ngIf="option.identifier !== 'label' 
+                    && option.type !== 'option' 
+                    && option.type !== 'multi_option' 
+                    && option.type !== 'richtext'
+                    && option.type !== 'url'"
+                    type="text" 
+                    value="{{ option.value.object }}" 
+                    formControlName="{{ option.identifier }}" 
+                    placeholder="{{ option.label }}" 
+                    required="{{ option.value.required }}">
+                </ion-input>
+                
+                <ion-input *ngIf="option.identifier === 'label'"
+                    type="text"
+                    value="{{ option.value.object }}"
+                    formControlName="{{ option.identifier }}" 
+                    placeholder="{{ option.label }}" 
+                    required="{{ option.value.required }}"
+                    (ngModelChange)="this.searchMediaInput.next($event)">
+                </ion-input>
+ 
+                <ion-note *ngIf="option.identifier === 'label' && searchLoading" slot="end" class="ion-no-padding">
+                  <ion-spinner name="dots"></ion-spinner>
+                </ion-note>
+
+                <ion-input *ngIf="option.type === 'url'"
+                    type="url" 
+                    value="{{ option.value.object }}" 
+                    formControlName="{{ option.identifier }}" 
+                    placeholder="{{ option.label }}" 
+                    required="{{ option.value.required }}">
+                </ion-input>
+
+                <ion-textarea *ngIf="option.type === 'richtext'"
+                    formControlName="{{ option.identifier }}"
+                    required="{{ option.value.required }}"
+                    auto-grow="true"
+                    cols="4"></ion-textarea>
+
+                <ion-select
+                    *ngIf="option.type === 'option'"
+                    [(value)]="option.value.object" 
+                    formControlName="{{ option.identifier }}"
+                    required="{{ option.value.required }}"
+                    placeholder="Select option">
+                    <ion-select-option *ngFor="let value of option.option_group" [value]="value.uuid">{{ value.label }}</ion-select-option>
+                </ion-select>
+
+                <ion-list *ngIf="option.type === 'multi_option'" [ngStyle]="{'width': '100%'}" lines="none">
+                    <ion-item-divider class="ion-no-padding">
+                        <ion-label>
+                          {{ option.label }}
+                        </ion-label>
+                    </ion-item-divider>
+
+                    <ion-item *ngFor="let form of createFormGroup.controls[option.identifier].controls; let i=index;" class="ion-no-padding">
+                        <ion-label>{{ option.option_group[i].option }}</ion-label>
+                        <ion-checkbox
+                            slot="start" 
+                            required="{{ option.value.required }}"
+                            [formControl]="form"></ion-checkbox>
+                    </ion-item>
+                </ion-list>
+            </ion-item>
+        </ion-list>
+    
+        <ion-button 
+          class="ion-margin-top"
+          [disabled]="createFormGroup.invalid || isLoading || mediaListed || searchLoading"
+          mode="ios"
+          expand="block"
+          color="tertiary"
+          (tap)="formSubmit()">
+            <ion-spinner *ngIf="isLoading" color="light" name="dots" class="ion-margin-end"></ion-spinner>
+            Kirim Media
+        </ion-button>
+    </form>
+</section>

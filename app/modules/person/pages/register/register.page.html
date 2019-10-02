@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title class="ion-padding-start-14 ion-padding-end-14">Daftar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p>
+    <ion-text color="dark">
+      Kawal media bersama-sama! Mendaftar untuk berkontribusi.
+    </ion-text>
+  </p>
+
+  <form [formGroup]="createFormGroup">
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating">Nama Pengguna</ion-label>
+      <ion-input
+        type="text"
+        inputmode="text"
+        formControlName="username"
+        clearInput="true"
+        minlength="3"
+        debounce="400"
+        (ionChange)="usernameCheck($event)"
+        required></ion-input>
+    </ion-item>
+
+    <section *ngIf="usernameErrors" [ngStyle]="{'margin-top': '5px', 'color': '#f25454'}">
+      <p *ngFor="let error of usernameErrors" class="ion-no-margin">
+        <small ion-text [innerHtml]="error"></small>
+      </p>
+    </section>
+
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating">Alamat Email</ion-label>
+      <ion-input
+        type="email"
+        inputmode="email"
+        formControlName="email"
+        clearInput="true"
+        debounce="400"
+        (ionChange)="emailCheck($event)"
+        required></ion-input>
+    </ion-item>
+
+    <section *ngIf="emailErrors" [ngStyle]="{'margin-top': '5px', 'color': '#f25454'}">
+      <p *ngFor="let error of emailErrors" class="ion-no-margin">
+        <small ion-text [innerHtml]="error"></small>
+      </p>
+    </section>
+
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating">Nomor Handphone</ion-label>
+      <ion-input
+        type="number"
+        inputmode="number"
+        formControlName="telephone"
+        clearInput="true"
+        minlength="10"
+        maxlength="14"
+        debounce="400"
+        (ionChange)="telephoneCheck($event)"
+        required></ion-input>
+    </ion-item>
+
+    <section *ngIf="telephoneErrors" [ngStyle]="{'margin-top': '5px', 'color': '#f25454'}">
+      <p *ngFor="let error of telephoneErrors" class="ion-no-margin">
+        <small ion-text [innerHtml]="error"></small>
+      </p>
+    </section>
+
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating">Kata Sandi</ion-label>
+      <ion-input
+        type="password"
+        inputmode="password"
+        formControlName="password"
+        clearInput="true"
+        minlength="6"
+        debounce="400"
+        (ionChange)="passwordCheck($event)"
+        required></ion-input>
+    </ion-item>
+
+    <section *ngIf="passwordErrors" [ngStyle]="{'margin-top': '5px', 'color': '#f25454'}">
+      <p *ngFor="let error of passwordErrors" class="ion-no-margin">
+        <small ion-text [innerHtml]="error"></small>
+      </p>
+    </section>
+
+    <ion-button 
+      [disabled]="createFormGroup.invalid || isLoading"
+      (tap)="formSubmit()"
+      expand="block"
+      mode="ios"
+      color="tertiary"
+      class="ion-margin-top">
+      <ion-spinner *ngIf="isLoading" color="light" name="dots" class="ion-margin-end"></ion-spinner>
+      {{ isLoading ? 'Memproses...' : 'Daftar' }}
+    </ion-button>
+  </form>
+</ion-content>

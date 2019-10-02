@@ -1,0 +1,55 @@
+<div *ngIf="basicLoading" fxLayout="row" fxLayoutAlign="start center">
+    <ion-spinner fxFlexOffset="10px"></ion-spinner>
+</div>
+
+<ion-list *ngIf="!basicLoading && basicOptions">
+    <ion-item *ngFor="let option of basicOptions; let i = index;" class="ion-no-padding">
+        <ion-label position="floating">{{ option.label }}</ion-label>
+        <ion-input 
+          #basicInput 
+          #basicInputValidator="ngModel" 
+          type="{{ option.type }}" 
+          name="{{ option.identifier }}" 
+          placeholder="{{ option.label }}" 
+          disabled="{{ indexEdited != i }}" 
+          [(ngModel)]="editValue[i]" 
+          minlength="{{ option.minlength }}">
+        </ion-input>
+
+        <p *ngIf="option.identifier === 'email' && indexEdited != i && personData.verified_mail === false" class="ion-no-margin ion-margin-bottom">
+            <ion-button (tap)="verification($event, option)" color="primary" mode="ios">
+                Verifikasi Email
+            </ion-button>
+        </p>
+
+        <p *ngIf="option.identifier === 'telephone' && indexEdited != i && personData.verified_telp === false" class="ion-no-margin ion-margin-bottom">
+            <ion-button (tap)="verification($event, option)" color="primary" mode="ios">
+                Verifikasi Nomor
+            </ion-button>
+        </p>
+
+        <ion-note slot="end" class="ion-no-padding">
+            <div *ngIf="indexEdited == i" fxLayout="row">
+                <ion-button
+                  *ngIf="!isSaveLoading" 
+                  [disabled]="isSaveLoading || editValue[i].length == 0 || !basicInputValidator.valid" 
+                  color="success"
+                  (tap)="saveBasic($event, option, i)">
+                    <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+                </ion-button>
+
+                <ion-spinner *ngIf="isSaveLoading" [ngStyle]="{'margin-top': '2px', 'margin-right': '5px'}"></ion-spinner>
+
+                <ion-button (tap)="editCancel($event, option, i)" color="danger">
+                    <ion-icon slot="icon-only" name="close"></ion-icon>
+                </ion-button>
+            </div>
+
+            <div *ngIf="indexEdited != i" fxLayout="row">
+                <ion-button (tap)="editBasic($event, option, i)" color="light" mode="ios">
+                    <ion-icon slot="icon-only" name="create"></ion-icon>
+                </ion-button>
+            </div>
+        </ion-note>
+    </ion-item>
+</ion-list>

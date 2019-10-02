@@ -1,0 +1,62 @@
+<ion-spinner *ngIf="isLoadingInit"></ion-spinner>
+
+<ion-item *ngIf="!isLoadingInit" class="ion-no-padding">
+  <ion-label position="floating">Cari Media</ion-label>
+  <ion-input
+    type="search"
+    clear="true"
+    debounce="1000"
+    (ionChange)="searchMediaInput($event)">
+  </ion-input>
+
+  <ion-note *ngIf="isLoadingSearch" slot="end" class="ion-no-padding">
+    <ion-spinner name="dots"></ion-spinner>
+  </ion-note>
+</ion-item>
+
+<section *ngIf="medias && medias.count > 0">
+  <ion-list>
+    <ion-item *ngFor="let item of listMedias; let lst = last;" class="ion-no-padding" routerLink="{{ item.uuid }}" lines="{{ lst ? 'none' : '' }}">
+      <ion-avatar slot="start">
+        <img src="{{ item.attribute_values && item.attribute_values.logo ? item.attribute_values.logo : 'assets/images/NoImage.png' }}">
+      </ion-avatar>
+
+      <ion-label class="ion-text-wrap">
+        <ion-text>
+          <h3><strong>{{ item.label }}</strong></h3>
+        </ion-text>
+
+        <ion-text *ngIf="item.attribute_values && item.attribute_values.description" color="medium">
+          <p>
+            {{ item.attribute_values.description }}
+          </p>
+        </ion-text>
+      </ion-label>
+
+      <ion-badge slot="end" color="{{ item.rating_count > 0 ? 'tertiary' : 'medium' }}" class="ion-no-margin">
+        <ion-row class="ion-align-items-center">
+          <ion-icon name="star"></ion-icon>
+          {{ item.rating_count }}
+        </ion-row>
+      </ion-badge>
+
+      <ion-badge slot="end" color="{{ item.report_count > 0 ? 'danger' : 'medium' }}" class="ion-margin-start">
+        <ion-row class="ion-align-items-center">
+          <ion-icon name="flag"></ion-icon>
+          {{ item.report_count }}
+        </ion-row>
+      </ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadNextData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Memuat media lain...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</section>
+
+<ion-text *ngIf="medias && medias.count === 0">
+  <p>Tidak ditemukan.</p>
+</ion-text>
